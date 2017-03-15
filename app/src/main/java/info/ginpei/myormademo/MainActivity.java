@@ -266,4 +266,83 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    /**
+     * Called from a button.
+     *
+     * @param view Button view.
+     */
+    public void updateButton_click(View view) {
+        // show a dialog and receive target user's ID
+        InputDialogBuilder builder = new InputDialogBuilder(this);
+        builder.setTitle("Update (1/2)");
+        builder.setMessage("Input user's ID");
+        builder.setHint("Alice");
+        builder.setCallback(new InputDialogBuilder.Callback() {
+            @Override
+            public void onClick(String result) {
+                if (result != null && !result.isEmpty()) {
+                    final long id = Long.parseLong(result);
+
+                    // show a dialog and receive new user's name
+                    InputDialogBuilder builder = new InputDialogBuilder(MainActivity.this);
+                    builder.setTitle("Update (2/2)");
+                    builder.setMessage("Input new name for the user #" + id);
+                    builder.setHint("123");
+                    builder.setCallback(new InputDialogBuilder.Callback() {
+                        @Override
+                        public void onClick(String result) {
+                            if (result != null && !result.isEmpty()) {
+                                // OK let's make it!
+                                updateUser(id, result);
+                            }
+                        }
+                    });
+                    builder.show();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * Update the row specified by ID in user table.
+     *
+     * @param id       ID.
+     * @param userName User's name.
+     */
+    private void updateUser(final long id, final String userName) {
+        // Q: Why final?
+        // A: Because they are used in the other thread.
+        //    You need to make sure they won't change since the thread runs asynchronously.
+
+        // prepare Orma
+        OrmaDatabase orma = OrmaDatabase.builder(this).build();
+        final User_Relation userRelation = orma.relationOfUser();
+
+        // select the models from your database
+        // (It needs to run on a worker thread.)
+        Log.d(TAG, "updateUser: Updating...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                User_Updater userUpdater = userRelation.updater()
+                        .idEq(id);
+                userUpdater
+                        .name(userName)
+                        .execute();
+
+                Log.d(TAG, "updateUser: Updated.");
+
+                // show the result
+                // (It needs to run on the UI thread. :D )
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
 }

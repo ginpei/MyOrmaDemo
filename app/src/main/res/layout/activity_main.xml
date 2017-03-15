@@ -32,4 +32,10 @@
         android:layout_height="wrap_content"
         android:onClick="updateAllButton_click"
         android:text="Update All Users (Update)" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateButton_click"
+        android:text="Update Specified User (Update)" />
 </LinearLayout>
