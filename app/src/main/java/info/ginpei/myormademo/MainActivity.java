@@ -15,7 +15,7 @@ import info.ginpei.myormademo.util.InputDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "G#MainActivity";
+    public static final String TAG = "MyOrmaDemo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
