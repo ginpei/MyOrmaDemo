@@ -42,6 +42,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="deleteAllButton_click"
+        android:text="Delete All Users (Delete)" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="deleteButton_click"
         android:text="Delete Specified User (Delete)" />
 </LinearLayout>

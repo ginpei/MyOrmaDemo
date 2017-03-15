@@ -351,6 +351,50 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param view Button view.
      */
+    public void deleteAllButton_click(View view) {
+        // OK kill'em all!
+        deleteAllUsers();
+    }
+
+    /**
+     * Delete all rows in user table.
+     */
+    private void deleteAllUsers() {
+        // Q: Why final?
+        // A: Because they are used in the other thread.
+        //    You need to make sure they won't change since the thread runs asynchronously.
+
+        // prepare Orma
+        OrmaDatabase orma = OrmaDatabase.builder(this).build();
+        final User_Relation userRelation = orma.relationOfUser();
+
+        // select the models from your database
+        // (It needs to run on a worker thread.)
+        Log.d(TAG, "deleteAllUsers: Deleting...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final int count = userRelation.deleter()
+                        .execute();
+                Log.d(TAG, "deleteAllUsers: Deleted " + count + " user(s).");
+
+                // show the result
+                // (It needs to run on the UI thread. :D )
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Deleted " + count + " user(s)!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * Called from a button.
+     *
+     * @param view Button view.
+     */
     public void deleteButton_click(View view) {
         // show a dialog and receive target user's ID
         InputDialogBuilder builder = new InputDialogBuilder(this);
