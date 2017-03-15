@@ -30,11 +30,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void createButton_click(View view) {
         // show a dialog and receive new user's name
-        InputDialogBuilder builder = new InputDialogBuilder(this);
-        builder.setTitle("Create");
-        builder.setMessage("Input new user's name");
-        builder.setHint("Alice");
-        builder.setCallback(new InputDialogBuilder.Callback() {
+        InputDialogBuilder.show(this, "Create", "Input new user's name", new InputDialogBuilder.Callback() {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
@@ -43,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
     }
 
     /**
@@ -142,12 +137,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view Button view.
      */
     public void readButton_click(View view) {
-        // show a dialog and receive new user's name
-        InputDialogBuilder builder = new InputDialogBuilder(this);
-        builder.setTitle("Select");
-        builder.setMessage("Input user's ID");
-        builder.setHint("123");
-        builder.setCallback(new InputDialogBuilder.Callback() {
+        InputDialogBuilder.show(this, "Read", "Input user's ID", new InputDialogBuilder.Callback() {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
@@ -158,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
     }
 
     /**
@@ -211,12 +200,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view Button view.
      */
     public void updateAllButton_click(View view) {
-        // show a dialog and receive new user's name
-        InputDialogBuilder builder = new InputDialogBuilder(this);
-        builder.setTitle("Update");
-        builder.setMessage("Input new name for all users");
-        builder.setHint("Alice");
-        builder.setCallback(new InputDialogBuilder.Callback() {
+        InputDialogBuilder.show(this, "Update", "Input new name for all users", new InputDialogBuilder.Callback() {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
@@ -225,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
     }
 
     /**
@@ -273,23 +256,13 @@ public class MainActivity extends AppCompatActivity {
      * @param view Button view.
      */
     public void updateButton_click(View view) {
-        // show a dialog and receive target user's ID
-        InputDialogBuilder builder = new InputDialogBuilder(this);
-        builder.setTitle("Update (1/2)");
-        builder.setMessage("Input user's ID");
-        builder.setHint("Alice");
-        builder.setCallback(new InputDialogBuilder.Callback() {
+        InputDialogBuilder.show(this, "Update (1/2)", "Input user's ID", new InputDialogBuilder.Callback() {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
                     final long id = Long.parseLong(result);
 
-                    // show a dialog and receive new user's name
-                    InputDialogBuilder builder = new InputDialogBuilder(MainActivity.this);
-                    builder.setTitle("Update (2/2)");
-                    builder.setMessage("Input new name for the user #" + id);
-                    builder.setHint("123");
-                    builder.setCallback(new InputDialogBuilder.Callback() {
+                    InputDialogBuilder.show(MainActivity.this, "Update (2/2)", "Input new name for the user #" + id, new InputDialogBuilder.Callback() {
                         @Override
                         public void onClick(String result) {
                             if (result != null && !result.isEmpty()) {
@@ -298,11 +271,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    builder.show();
                 }
             }
         });
-        builder.show();
     }
 
     /**
@@ -396,12 +367,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view Button view.
      */
     public void deleteButton_click(View view) {
-        // show a dialog and receive target user's ID
-        InputDialogBuilder builder = new InputDialogBuilder(this);
-        builder.setTitle("Select");
-        builder.setMessage("Input user's ID");
-        builder.setHint("123");
-        builder.setCallback(new InputDialogBuilder.Callback() {
+        InputDialogBuilder.show(this, "Select", "Input user's ID", new InputDialogBuilder.Callback() {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
@@ -412,7 +378,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
     }
 
     /**

@@ -62,6 +62,14 @@ public class InputDialogBuilder extends AlertDialog.Builder {
         return super.create();
     }
 
+    public static void show(Context context, String title, String message, Callback callback) {
+        InputDialogBuilder builder = new InputDialogBuilder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setCallback(callback);
+        builder.show();
+    }
+
     public interface Callback {
         public void onClick(String result);
     }
