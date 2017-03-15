@@ -38,4 +38,10 @@
         android:layout_height="wrap_content"
         android:onClick="updateButton_click"
         android:text="Update Specified User (Update)" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="deleteButton_click"
+        android:text="Delete Specified User (Delete)" />
 </LinearLayout>

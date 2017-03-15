@@ -345,4 +345,69 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    /**
+     * Called from a button.
+     *
+     * @param view Button view.
+     */
+    public void deleteButton_click(View view) {
+        // show a dialog and receive target user's ID
+        InputDialogBuilder builder = new InputDialogBuilder(this);
+        builder.setTitle("Select");
+        builder.setMessage("Input user's ID");
+        builder.setHint("123");
+        builder.setCallback(new InputDialogBuilder.Callback() {
+            @Override
+            public void onClick(String result) {
+                if (result != null && !result.isEmpty()) {
+                    long id = Long.parseLong(result);
+
+                    // OK let's fine the guy!
+                    deleteUser(id);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * Delete one row for the specified condition from user table.
+     *
+     * @param id User's ID.
+     */
+    private void deleteUser(final long id) {
+        // Q: Why final?
+        // A: Because they are used in the other thread.
+        //    You need to make sure they won't change since the thread runs asynchronously.
+
+        // Note: The specified row may not exist in the table.
+        //       But who cares?
+
+        // prepare Orma
+        OrmaDatabase orma = OrmaDatabase.builder(this).build();
+        final User_Relation userRelation = orma.relationOfUser();
+
+        // select the models from your database
+        // (It needs to run on a worker thread.)
+        Log.d(TAG, "deleteUser: Deleting...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int count = userRelation.deleter()
+                        .idEq(id)
+                        .execute();
+                Log.d(TAG, "deleteUser: Deleted " + count + " user(s).");
+
+                // show the result
+                // (It needs to run on the UI thread. :D )
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
 }
