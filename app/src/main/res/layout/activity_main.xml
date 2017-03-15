@@ -18,6 +18,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="readAllUsers"
+        android:onClick="readAllButton_click"
         android:text="Read All Users (Select)" />
 </LinearLayout>

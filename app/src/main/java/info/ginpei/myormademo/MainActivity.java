@@ -94,7 +94,11 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param view Button view.
      */
-    public void readAllUsers(View view) {
+    public void readAllButton_click(View view) {
+        readAllUsers();
+    }
+
+    private void readAllUsers() {
         // Q: Why final?
         // A: Because they are used in the other thread.
         //    You need to make sure they won't change since the thread runs asynchronously.
