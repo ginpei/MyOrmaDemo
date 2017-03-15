@@ -10,6 +10,7 @@ import info.ginpei.myormademo.basicModels.OrmaDatabase;
 import info.ginpei.myormademo.basicModels.User;
 import info.ginpei.myormademo.basicModels.User_Relation;
 import info.ginpei.myormademo.basicModels.User_Selector;
+import info.ginpei.myormademo.util.InputDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,12 +23,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Create a new row in the user table.
      * Called from a button.
      *
      * @param view Button view.
      */
-    public void createUser(View view) {
+    public void createButton_click(View view) {
+        // show a dialog and receive new user's name
+        InputDialogBuilder builder = new InputDialogBuilder(this);
+        builder.setTitle("Create");
+        builder.setMessage("Input new user's name");
+        builder.setHint("Alice");
+        builder.setCallback(new InputDialogBuilder.Callback() {
+            @Override
+            public void onClick(String result) {
+                if (result != null && !result.isEmpty()) {
+                    // OK let's make it!
+                    createUser(result);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * Create a user user.
+     *
+     * @param userName New user's name.
+     */
+    private void createUser(String userName) {
         // Q: Why final?
         // A: Because they are used in the other thread.
         //    You need to make sure they won't change since the thread runs asynchronously.
@@ -35,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         // prepare a model
         // (The ID will be set automatically by Orma.)
         final User user = new User();
-        user.name = "User Name";
+        user.name = userName;
 
         // prepare Orma
         OrmaDatabase orma = OrmaDatabase.builder(this).build();

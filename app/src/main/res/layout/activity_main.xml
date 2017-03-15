@@ -12,7 +12,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="createUser"
+        android:onClick="createButton_click"
         android:text="Create An User (Insert)" />
 
     <Button
