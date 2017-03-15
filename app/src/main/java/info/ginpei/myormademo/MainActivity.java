@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Create a user user.
+     * Insert a new row into user table.
      *
      * @param userName New user's name.
      */
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Read all rows from the user table.
      * Called from a button.
      *
      * @param view Button view.
@@ -99,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         readAllUsers();
     }
 
+    /**
+     * Select all rows from user table.
+     */
     private void readAllUsers() {
         // Q: Why final?
         // A: Because they are used in the other thread.
@@ -134,6 +136,11 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    /**
+     * Called from a button.
+     *
+     * @param view Button view.
+     */
     public void readButton_click(View view) {
         // show a dialog and receive new user's name
         InputDialogBuilder builder = new InputDialogBuilder(this);
@@ -154,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Select one row for the specified condition from user table.
+     *
+     * @param id User's ID.
+     */
     private void readUser(final long id) {
         // Q: Why final?
         // A: Because they are used in the other thread.
@@ -193,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-
     /**
      * Called from a button.
      *
@@ -218,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Update all rows in the user table.
+     * Update all rows in user table with specified values.
      *
      * @param userName New name.
      */
