@@ -99,11 +99,6 @@ public class MainActivity extends AppCompatActivity {
         // A: Because they are used in the other thread.
         //    You need to make sure they won't change since the thread runs asynchronously.
 
-        // prepare a model
-        // (The ID will be set automatically by Orma.)
-        final User user = new User();
-        user.name = "User Name";
-
         // prepare Orma
         OrmaDatabase orma = OrmaDatabase.builder(this).build();
         final User_Relation userRelation = orma.relationOfUser();
