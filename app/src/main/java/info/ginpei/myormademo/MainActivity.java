@@ -132,4 +132,63 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    public void readButton_click(View view) {
+        // show a dialog and receive new user's name
+        InputDialogBuilder builder = new InputDialogBuilder(this);
+        builder.setTitle("Select");
+        builder.setMessage("Input user's ID");
+        builder.setHint("123");
+        builder.setCallback(new InputDialogBuilder.Callback() {
+            @Override
+            public void onClick(String result) {
+                if (result != null && !result.isEmpty()) {
+                    long id = Long.parseLong(result);
+
+                    // OK let's fine the guy!
+                    readUser(id);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void readUser(final long id) {
+        // Q: Why final?
+        // A: Because they are used in the other thread.
+        //    You need to make sure they won't change since the thread runs asynchronously.
+
+        // prepare Orma
+        OrmaDatabase orma = OrmaDatabase.builder(this).build();
+        final User_Relation userRelation = orma.relationOfUser();
+
+        // select the models from your database
+        // (It needs to run on a worker thread.)
+        Log.d(TAG, "readUser: Reading...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                User_Selector userSelector = userRelation.selector()
+                        .idEq(id);
+                int count = userSelector.count();
+                if (count > 0) {
+                    User user = userSelector.get(0);
+                    Log.d(TAG, "readUser: Here is the user whose ID is " + user.id + " and name is " + user.name);
+                } else {
+                    Log.d(TAG, "readUser: There are no users whose ID is " + id);
+                }
+
+                Log.d(TAG, "readUser: Read.");
+
+                // show the result
+                // (It needs to run on the UI thread. :D )
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "Read!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+    }
 }
