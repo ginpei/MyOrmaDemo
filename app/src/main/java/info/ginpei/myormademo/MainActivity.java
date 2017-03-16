@@ -10,7 +10,6 @@ import info.ginpei.myormademo.basicModels.OrmaDatabase;
 import info.ginpei.myormademo.basicModels.User;
 import info.ginpei.myormademo.basicModels.User_Relation;
 import info.ginpei.myormademo.basicModels.User_Selector;
-import info.ginpei.myormademo.basicModels.User_Updater;
 import info.ginpei.myormademo.util.InputDialogBuilder;
 
 public class MainActivity extends AppCompatActivity {
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         .execute(user);
                 user.id = assignedId;  // the ID is generated automatically
 
-                Log.d(TAG, "createUser: Inserted.");
+                Log.d(TAG, "createUser: Inserted with the ID " + assignedId + ".");
 
                 // show the result
                 // (Something like Toast, View.setText needs to run on the UI thread. :D )
@@ -90,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view Button view.
      */
     public void readAllButton_click(View view) {
+        // OK look over!
         readAllUsers();
     }
 
@@ -113,8 +113,12 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 User_Selector userSelector = userRelation.selector();
                 final int count = userSelector.count();
-                for (User user : userSelector) {
-                    Log.d(TAG, "readAllUsers: Here is the user whose ID is " + user.id + " and name is " + user.name);
+                if (count > 0) {
+                    for (User user : userSelector) {
+                        Log.d(TAG, "readAllUsers: Here is the user whose ID is " + user.id + " and name is " + user.name + ".");
+                    }
+                } else {
+                    Log.d(TAG, "readUser: There are no users.");
                 }
 
                 Log.d(TAG, "readAllUsers: Read.");
@@ -143,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 if (result != null && !result.isEmpty()) {
                     long id = Long.parseLong(result);
 
-                    // OK let's fine the guy!
+                    // OK let's find the guy!
                     readUser(id);
                 }
             }
@@ -172,12 +176,12 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 User_Selector userSelector = userRelation.selector()
                         .idEq(id);
-                int count = userSelector.count();
+                final int count = userSelector.count();
                 if (count > 0) {
                     User user = userSelector.get(0);
-                    Log.d(TAG, "readUser: Here is the user whose ID is " + user.id + " and name is " + user.name);
+                    Log.d(TAG, "readUser: Here is the user whose ID is " + user.id + " and name is " + user.name + ".");
                 } else {
-                    Log.d(TAG, "readUser: There are no users whose ID is " + id);
+                    Log.d(TAG, "readUser: There are no users whose ID is " + id + ".");
                 }
 
                 Log.d(TAG, "readUser: Read.");
@@ -187,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Read!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Read " + count + " user(s)!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -204,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
-                    // OK let's make it!
+                    // OK beat them!
                     updateAllUsers(result);
                 }
             }
@@ -231,19 +235,18 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                User_Updater userUpdater = userRelation.updater();
-                userUpdater
+                final int count = userRelation.updater()
                         .name(userName)
                         .execute();
 
-                Log.d(TAG, "updateAllUsers: Updated.");
+                Log.d(TAG, "updateUser: Updated " + count + " user(s).");
 
                 // show the result
                 // (It needs to run on the UI thread. :D )
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Updated " + count + " user(s)!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -266,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(String result) {
                             if (result != null && !result.isEmpty()) {
-                                // OK let's make it!
+                                // OK beat it!
                                 updateUser(id, result);
                             }
                         }
@@ -297,20 +300,19 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                User_Updater userUpdater = userRelation.updater()
-                        .idEq(id);
-                userUpdater
+                final int count = userRelation.updater()
+                        .idEq(id)
                         .name(userName)
                         .execute();
 
-                Log.d(TAG, "updateUser: Updated.");
+                Log.d(TAG, "updateUser: Updated " + count + " user(s).");
 
                 // show the result
                 // (It needs to run on the UI thread. :D )
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Updated " + count + " user(s)!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -367,13 +369,13 @@ public class MainActivity extends AppCompatActivity {
      * @param view Button view.
      */
     public void deleteButton_click(View view) {
-        InputDialogBuilder.show(this, "Select", "Input user's ID", new InputDialogBuilder.Callback() {
+        InputDialogBuilder.show(this, "Delete", "Input user's ID", new InputDialogBuilder.Callback() {
             @Override
             public void onClick(String result) {
                 if (result != null && !result.isEmpty()) {
                     long id = Long.parseLong(result);
 
-                    // OK let's fine the guy!
+                    // OK search and destroy!
                     deleteUser(id);
                 }
             }
@@ -403,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int count = userRelation.deleter()
+                final int count = userRelation.deleter()
                         .idEq(id)
                         .execute();
                 Log.d(TAG, "deleteUser: Deleted " + count + " user(s).");
@@ -413,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Deleted " + count + " user(s)!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
